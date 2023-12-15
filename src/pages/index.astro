@@ -1,29 +1,30 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Solar from '../components/Solar.astro';
+import Layout from "../layouts/Layout.astro";
+import Solar from "../components/Solar.tsx";
+import "../styles/css/weather-icons.min.css";
 ---
 
 <Layout title="Welcome to Astro.">
-	<main>
-		<Solar />
-	</main>
+  <main>
+    <Solar client:load />
+  </main>
 </Layout>
 
 <style>
-	main {
-		margin: auto;
-		padding: 1rem;
-		width: 800px;
-		max-width: calc(100% - 2rem);
-		color: white;
-		font-size: 20px;
-		line-height: 1.6;
-	}
-	h1 {
-		font-size: 4rem;
-		font-weight: 700;
-		line-height: 1;
-		text-align: center;
-		margin-bottom: 1em;
-	}
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin-bottom: 1em;
+  }
 </style>
