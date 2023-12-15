@@ -48,6 +48,7 @@ const SolarComponent: React.FC = () => {
         <SolarForecastComponent
           solarData={$solarResult?.wattHours as WattHourEntry[]}
           onShowConfig={() => showSolarConfig.set(true)}
+          kwp={$solarConfig?.kwp}
         />
       )}
     </div>
