@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useStore } from "@nanostores/react";
 import {
@@ -6,25 +6,36 @@ import {
   showSolarConfig,
   solarConf,
   solarResult,
+  type WattHourEntry,
 } from "../solare-store";
 import SolarConfigModalComponent from "./SolarConfigModal";
 import SolarForecastComponent from "./SolarForecast";
+import { onMount } from "nanostores";
 
 const SolarComponent: React.FC = () => {
+  const [showSolarConf, setShowSolarConf] = useState(false);
+
   const $showConfig = useStore(showSolarConfig);
   const $solarConfig = useStore(solarConf);
   const $solarResult = useStore(solarResult);
 
+  onMount(solarConf, () => {
+    if (Object.keys(solarConf.get()).length === 0) {
+      showSolarConfig.set(true);
+    }
+  });
+
   useEffect(() => {
     getSolarData(false);
-  }, []);
+    setShowSolarConf($showConfig);
+  }, [$showConfig]);
 
   return (
-    <div className="relative w-full max-w-6xl">
+    <div className="relative w-full max-w-6xl text-center">
       <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-pink-800">
         Solar Forecast
       </h1>
-      {$showConfig ? (
+      {showSolarConf ? (
         <SolarConfigModalComponent
           initialValues={$solarConfig}
           onSubmitConfig={(data) => {
@@ -35,7 +46,7 @@ const SolarComponent: React.FC = () => {
         />
       ) : (
         <SolarForecastComponent
-          solarData={$solarResult}
+          solarData={$solarResult?.wattHours as WattHourEntry[]}
           onShowConfig={() => showSolarConfig.set(true)}
         />
       )}

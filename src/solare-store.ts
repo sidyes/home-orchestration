@@ -1,6 +1,6 @@
 import { persistentMap } from "@nanostores/persistent";
 import axios from "axios";
-import { action, atom, onAction, onMount } from "nanostores";
+import { action, atom, onMount } from "nanostores";
 
 export const showSolarConfig = atom(false);
 
@@ -12,15 +12,18 @@ export type SolarConfig = {
   kwp?: string;
 };
 
+export interface WattHourEntry {
+  date: string;
+  value: number;
+}
+
 export type SolarForecast = {
   executedLast?: string;
-  wattHours?: {
-    [key: string]: string;
-  }[];
+  wattHours?: WattHourEntry[];
 };
 
 export const solarConf = persistentMap<SolarConfig>(
-  "solarConfig",
+  "solarConf",
   {},
   {
     encode: JSON.stringify,
@@ -39,6 +42,19 @@ export const solarResult = persistentMap<SolarForecast>(
 
 const getHoursDiffBetweenDates = (dateInitial: any, dateFinal: any) =>
   (dateFinal - dateInitial) / (1000 * 3600);
+
+const transformObjToArr = (resp: { [key: string]: string }) => {
+  const result: WattHourEntry[] = [];
+
+  Object.keys(resp).forEach((elem) => {
+    result.push({
+      date: elem,
+      value: +resp[elem],
+    });
+  });
+
+  return result;
+};
 
 export const getSolarData = action(
   solarResult,
@@ -72,7 +88,7 @@ export const getSolarData = action(
 
       const update = {
         executedLast: new Date().toISOString(),
-        wattHours: response.data.result,
+        wattHours: transformObjToArr(response.data.result),
       };
       store.set(update);
     }
