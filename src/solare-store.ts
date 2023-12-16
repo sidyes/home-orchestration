@@ -59,8 +59,8 @@ const transformObjToArr = (resp: { [key: string]: string }) => {
 export const getSolarData = action(
   solarResult,
   "getSolarData",
-  async (store, enforce: boolean) => {
-    const { lat, lon, dec, az, kwp } = solarConf.get();
+  async (store, enforce: boolean, config: SolarConfig) => {
+    const { lat, lon, dec, az, kwp } = config;
 
     // it is enough when already one property is undefined
     if (lat === undefined) {

@@ -26,13 +26,13 @@ const SolarComponent: React.FC = () => {
   });
 
   useEffect(() => {
-    getSolarData(false);
+    getSolarData(false, $solarConfig);
     setShowSolarConf($showConfig);
-  }, [$showConfig]);
+  }, [$showConfig, $solarConfig]);
 
   return (
     <div className="relative w-full max-w-6xl text-center">
-      <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-pink-800">
+      <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-purple-900">
         Solar Forecast
       </h1>
       {showSolarConf ? (
@@ -41,12 +41,12 @@ const SolarComponent: React.FC = () => {
           onSubmitConfig={(data) => {
             solarConf.set(data);
             showSolarConfig.set(false);
-            getSolarData(true);
+            getSolarData(true, data);
           }}
         />
       ) : (
         <SolarForecastComponent
-          solarData={$solarResult?.wattHours as WattHourEntry[]}
+          solarData={$solarResult?.wattHours as WattHourEntry[] ?? []}
           onShowConfig={() => showSolarConfig.set(true)}
           kwp={$solarConfig?.kwp}
         />
