@@ -45,6 +45,7 @@ const SolarConfigModalComponent: React.FC<Props> = ({
         </label>
         <input
           type="number"
+          step="0.00000001"
           id="lat"
           className={`block w-full bg-transparent outline-none border-b-2 py-2 px-4  placeholder-purple-500 focus:bg-purple-600 ${
             errors.lat
@@ -69,6 +70,7 @@ const SolarConfigModalComponent: React.FC<Props> = ({
         </label>
         <input
           type="number"
+          step="0.00000001"
           id="lon"
           className={`block w-full bg-transparent outline-none border-b-2 py-2 px-4  placeholder-purple-500 focus:bg-purple-600 ${
             errors.lon
