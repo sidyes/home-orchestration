@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import type { WattHourEntry } from "../solare-store";
+import { FaRegThumbsUp } from "@react-icons/all-files/fa/FaRegThumbsUp";
+import { FaRegThumbsDown } from "@react-icons/all-files/fa/FaRegThumbsDown";
 
-import moment from "moment";
+import moment, { type Moment } from "moment";
 
 export interface Props {
   onShowConfig: () => void;
@@ -21,20 +23,19 @@ const SolarForecastComponent: React.FC<Props> = ({
   useEffect(() => setDomLoaded(true), []);
 
   const getWeatherIcon = (wattHours: number, date: Moment) => {
-    const rel = (wattHours / (kwp * 1000)).toFixed(2);
+    const rel = +(wattHours / (kwp * 1000)).toFixed(2);
 
-    if (rel >= 0.8) {
+    if (rel >= 0.7) {
       // sunny
-      return "wi-day-sunny";
-    } else if (rel >= 0.5) {
+      return <FaRegThumbsUp className="mr-4 h-8 w-8 text-green-400" />;
+    } else if (rel > 0.3) {
       // partially sunny
-      return "wi-day-cloudy";
-    } else if (rel >= 0.25) {
-      // cloudy
-      return "wi-cloudy";
+      return (
+        <FaRegThumbsUp className="mr-4 h-8 w-8 -rotate-90 text-yellow-400" />
+      );
     } else {
-      // consider date
-      return "wi-night-clear";
+      // cloudy / night
+      return <FaRegThumbsDown className="mr-4 h-8 w-8  text-red-400" />;
     }
   };
 
@@ -67,12 +68,7 @@ const SolarForecastComponent: React.FC<Props> = ({
               {showDate && <div className="col-span-2">{day}</div>}
               <div className="flex items-center">{timeRange}</div>
               <div className="flex items-center">
-                <i
-                  className={`wi ${getWeatherIcon(
-                    absoluteVal,
-                    curr
-                  )} mr-2 h-14 w-14 text-4xl text-purple-400`}
-                ></i>{" "}
+                {getWeatherIcon(absoluteVal, curr)}
                 {absoluteVal} Wh
               </div>
             </div>
